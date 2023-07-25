@@ -325,6 +325,8 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Automatically display line diagnostics in hover window
+vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -513,7 +515,9 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+  vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
