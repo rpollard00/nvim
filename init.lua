@@ -168,15 +168,26 @@ require('lazy').setup({
   --   end,
   -- },
 
+  -- {
+  --   -- Theme inspired by rose-pine
+  --   'rose-pine/neovim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'rose-pine'
+  --   end,
+  -- },
   {
-    -- Theme inspired by rose-pine
-    'rose-pine/neovim',
+    "ellisonleao/gruvbox.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'rose-pine'
+      vim.o.terminal_colors = true
+      vim.o.background = "dark"
+      vim.o.contrast = "hard"
+      vim.o.invert_selection = true
+      vim.cmd.colorscheme 'gruvbox'
     end,
+    opts = ...
   },
-
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -191,16 +202,17 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
-    },
-  },
+  -- {
+  --   -- Add indentation guides even on blank lines
+  --   'lukas-reineke/indent-blankline.nvim',
+  --   -- Enable `lukas-reineke/indent-blankline.nvim`
+  --   -- See `:help indent_blankline.txt`
+  --   main = "ibl",
+  --   opts = {
+  --     char = '┊',
+  --     show_trailing_blankline_indent = false,
+  --   },
+  -- },
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',         opts = {} },
@@ -541,7 +553,7 @@ end
 local servers = {
   -- clangd = {},
   gopls = {},
-  pyright = {},
+  -- pyright = {},
   -- rust_analyzer = {},
   tsserver = {},
 
@@ -597,6 +609,10 @@ cmp.setup {
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<C-y>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Enter>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
