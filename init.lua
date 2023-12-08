@@ -368,7 +368,7 @@ vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 -- kill capital Q which quits?
-vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "Q", "@qj")
 
 -- find replace on current word
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
