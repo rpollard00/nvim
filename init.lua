@@ -339,6 +339,8 @@ vim.o.termguicolors = true
 
 -- Automatically display line diagnostics in hover window
 vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+-- Attach bicep lsp to bicep files
+vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -432,8 +434,11 @@ require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
+  sync_install = true,
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
+
+  ignore_install = {},
 
   highlight = { enable = true },
   indent = { enable = true },
@@ -445,6 +450,9 @@ require('nvim-treesitter.configs').setup {
       scope_incremental = '<c-s>',
       node_decremental = '<M-space>',
     },
+  },
+
+  modules = {
   },
   textobjects = {
     select = {
@@ -588,6 +596,13 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
+-- local dotnet_7_bin = "/usr/local/opt/dotnet-sdk-7.0.404-osx-x64/dotnet"
+local bicep_lsp_bin = "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll"
+
+require 'lspconfig'.bicep.setup {
+  cmd = { "dotnet", bicep_lsp_bin },
+}
+
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
