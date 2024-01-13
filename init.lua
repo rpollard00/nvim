@@ -1,6 +1,6 @@
 --[[
 
-=====================================================================
+====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
 
@@ -71,6 +71,7 @@ require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'tpope/vim-commentary',
+  'tpope/vim-repeat',
   {
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
@@ -97,7 +98,57 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        cmdline = {
+          view = "cmdline",
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = true,        -- add a border to hover docs and signature help
+        },
+      })
+    end,
+  },
+  "folke/twilight.nvim",
+  {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    opts = {
+      plugins = {
+        gitsigns = true,
+        tmux = true,
+        kitty = { enabled = false, font = "+2" },
+      },
+    },
+    keys = { { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
+  },
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -112,6 +163,77 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
+  },
+  {
+    "folke/flash.nvim",
+    enabled = true,
+    init = function()
+      -- vim.keymap.set("n", "x", "<cmd>lua require('flash').jump()<cr>")
+      -- vim.opt.keymap = "emoji"
+    end,
+    opts = {
+      -- labels = "#abcdef",
+      modes = {
+        -- char = { jump_labels = false },
+        -- treesitter = {
+        --   label = {
+        --     rainbow = { enabled = true },
+        --   },
+        -- },
+        treesitter_search = {
+          label = {
+            rainbow = { enabled = true },
+            -- format = function(opts)
+            --   local label = opts.match.label
+            --   if opts.after then
+            --     label = label .. ">"
+            --   else
+            --     label = "<" .. label
+            --   end
+            --   return { { label, opts.hl_group } }
+            -- end,
+          },
+        },
+      },
+      -- search = { mode = "fuzzy" },
+      -- labels = "😅😀🏇🐎🐴🐵🐒",
+    },
+  },
+  -- Flit and Flash Conflict --
+  -- Install Flit, Leap, repeat --
+  --
+  -- {
+  --   'tpope/vim-repeat',
+  --   'ggandor/leap.nvim',
+  --   config = function()
+  --     require('leap').create_default_mappings()
+  --   end,
+  -- },
+  -- {
+  --   'ggandor/flit.nvim',
+  --   dependencies = {
+  --     "tpope/vim-repeat",
+  --     "ggandor/leap.nvim",
+  --   },
+  --   config = function()
+  --     require('flit').setup {
+  --       keys = { f = 'f', F = 'F', t = 't', T = 'T' },
+  --       -- A string like "nv", "nvo", "o", etc.
+  --       labeled_modes = "v",
+  --       multiline = true,
+  --       -- Like `leap`s similar argument (call-specific overrides).
+  --       -- E.g.: opts = { equivalence_classes = {} }
+  --       opts = {}
+  --     }
+  --   end,
+  --
+  -- },
+  {
+    "Wansmer/treesj",
+    keys = {
+      { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
+    },
+    opts = { use_default_keymaps = false, max_join_length = 150 },
   },
 
   {
@@ -159,6 +281,10 @@ require('lazy').setup({
     },
   },
 
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  },
   -- {
   --   -- Theme inspired by Atom
   --   'navarasu/onedark.nvim',
@@ -177,18 +303,6 @@ require('lazy').setup({
   --   end,
   -- },
   {
-    "ellisonleao/gruvbox.nvim",
-    priority = 1000,
-    config = function()
-      vim.o.terminal_colors = true
-      vim.o.background = "dark"
-      vim.o.contrast = "hard"
-      vim.o.invert_selection = true
-      vim.cmd.colorscheme 'gruvbox'
-    end,
-    opts = ...
-  },
-  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -202,17 +316,16 @@ require('lazy').setup({
     },
   },
 
-  -- {
-  --   -- Add indentation guides even on blank lines
-  --   'lukas-reineke/indent-blankline.nvim',
-  --   -- Enable `lukas-reineke/indent-blankline.nvim`
-  --   -- See `:help indent_blankline.txt`
-  --   main = "ibl",
-  --   opts = {
-  --     char = '┊',
-  --     show_trailing_blankline_indent = false,
-  --   },
-  -- },
+  {
+    -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- See `:help indent_blankline.txt`
+    main = "ibl",
+    opts = {
+    },
+  },
+
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',         opts = {} },
@@ -259,6 +372,19 @@ require('lazy').setup({
       vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
     end
   },
+  {
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
+    config = function()
+      vim.o.terminal_colors = true
+      vim.o.background = "dark"
+      vim.o.contrast = "hard"
+      vim.o.invert_selection = true
+      vim.cmd('au ColorScheme * hi clear SignColumn')
+      vim.cmd.colorscheme 'gruvbox'
+    end,
+    opts = ...
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -280,7 +406,7 @@ require('lazy').setup({
 -- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -348,7 +474,6 @@ vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', '<leader>h', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
-
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 -- allow moving selected block in visual mode
@@ -390,6 +515,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+-- [[ Configure Indent_blankline ]]
+require('ibl').setup()
+-- require('leap').create_default_mappings()
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
@@ -417,7 +545,6 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>pg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>pf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
@@ -425,6 +552,7 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>ps', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 -- vim.keymap.set('n', '<leader>sg', function()
+-- local builtin = require('telescope.builtin')
 --   builtin.grep_string({ search = vim.fn.input("Grep > ") });
 -- end)
 
@@ -536,7 +664,7 @@ local on_attach = function(_, bufnr)
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
   vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
 
   -- Lesser used LSP functionality
