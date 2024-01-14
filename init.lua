@@ -77,7 +77,7 @@ require('lazy').setup({
     config = function() require("nvim-autopairs").setup {} end
   },
 
-  -- Detect tabstop and shiftwidth automatically
+  -- Detect tabstop and  automatically
   'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -135,6 +135,20 @@ require('lazy').setup({
         },
       })
     end,
+  },
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    opts = {
+      shade_terminals = false
+    },
+    -- keys = {
+    --   -- { "<`>", "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm Float" },
+    -- },
+    config = function()
+      require('toggleterm').setup()
+    end,
+
   },
   "folke/twilight.nvim",
   {
@@ -303,6 +317,14 @@ require('lazy').setup({
   --   end,
   -- },
   {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('bufferline').setup()
+    end,
+  },
+  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -368,7 +390,7 @@ require('lazy').setup({
       vim.keymap.set('n', "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
       vim.keymap.set('n', "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
       vim.keymap.set('n', "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
-      vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+      -- vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
       vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
     end
   },
@@ -488,6 +510,9 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+vim.keymap.set('n', '`', '<cmd>ToggleTerm direction=float<CR>', { noremap = true, silent = true })
+vim.keymap.set('t', '`', '<cmd>ToggleTerm direction=float<CR>', { noremap = true, silent = true })
+
 -- greatest remap ever, when pasting over a block
 -- keep pasting and don't put the replaced term into the buffer
 vim.keymap.set("x", "<leader>p", [["_dP]])
@@ -544,7 +569,6 @@ vim.keymap.set('n', '<leader>/', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
-
 vim.keymap.set('n', '<leader>pg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>pf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
@@ -688,9 +712,11 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
+  black = {},
   gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
+  prettier = {},
+  rust_analyzer = {},
+  terraformls = {},
   tsserver = {},
 
   lua_ls = {
@@ -730,7 +756,19 @@ local bicep_lsp_bin = "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll"
 require 'lspconfig'.bicep.setup {
   cmd = { "dotnet", bicep_lsp_bin },
 }
-
+-- ToggleTerm Terminal KeyMappings
+-- function _G.set_terminal_keymaps()
+--   local opts = { buffer = 0 }
+--   vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+--   -- vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+--   -- vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+--   -- vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+--   -- vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+--   -- vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+--   -- vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+-- end
+--
+-- vim.cmd('autocmd! TermOpen term://*toggleterm* lua set_terminal_keymaps()')
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
