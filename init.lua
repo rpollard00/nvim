@@ -249,29 +249,32 @@ require('lazy').setup({
     },
     opts = { use_default_keymaps = false, max_join_length = 150 },
   },
-
   {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {
-        sort_by = "case_sensitive",
-        view = {
-          width = 30,
-        },
-        renderer = {
-          group_empty = true,
-        },
-        filters = {
-          dotfiles = true,
-        },
-      }
-    end,
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
   },
+  -- {
+  --   "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup {
+  --       sort_by = "case_sensitive",
+  --       view = {
+  --         width = 30,
+  --       },
+  --       renderer = {
+  --         group_empty = true,
+  --       },
+  --       filters = {
+  --         dotfiles = true,
+  --       },
+  --     }
+  --   end,
+  -- },
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',          opts = {} },
   {
@@ -322,6 +325,8 @@ require('lazy').setup({
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('bufferline').setup()
+      vim.keymap.set('n', "<C-t>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<C-T>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
     end,
   },
   {
@@ -575,6 +580,7 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>ps', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { noremap = true, desc = '[F]ile [B]rowser' })
 -- vim.keymap.set('n', '<leader>sg', function()
 -- local builtin = require('telescope.builtin')
 --   builtin.grep_string({ search = vim.fn.input("Grep > ") });
@@ -712,9 +718,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  black = {},
   gopls = {},
-  prettier = {},
   rust_analyzer = {},
   terraformls = {},
   tsserver = {},
