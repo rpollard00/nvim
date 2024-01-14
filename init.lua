@@ -327,6 +327,12 @@ require('lazy').setup({
       require('bufferline').setup()
       vim.keymap.set('n', "<C-t>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
       vim.keymap.set('n', "<C-T>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>1", ':BufferLineGoToBuffer 1<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>2", ':BufferLineGoToBuffer 2<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>3", ':BufferLineGoToBuffer 3<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>4", ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>-", ':BufferLineMovePrev<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>=", ':BufferLineMoveNext<CR>', { noremap = true, silent = true })
     end,
   },
   {
@@ -550,15 +556,21 @@ require('ibl').setup()
 -- require('leap').create_default_mappings()
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+local fb_actions = require('telescope').extensions.file_browser.actions
+
 require('telescope').setup {
   defaults = {
     mappings = {
       i = {
+        ['<C-c>'] = fb_actions.create,
+        ['<C-d>'] = fb_actions.remove,
+        ['<C-r>'] = fb_actions.rename,
+        ['<C-y>'] = fb_actions.copy,
         ['<C-u>'] = false,
-        ['<C-d>'] = false,
       },
     },
   },
+
 }
 
 -- Enable telescope fzf native, if installed
@@ -693,7 +705,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
+  -- vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
   nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
 
