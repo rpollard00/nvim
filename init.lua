@@ -333,6 +333,7 @@ require('lazy').setup({
       vim.keymap.set('n', "<leader>4", ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = true })
       vim.keymap.set('n', "<leader>-", ':BufferLineMovePrev<CR>', { noremap = true, silent = true })
       vim.keymap.set('n', "<leader>=", ':BufferLineMoveNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', "<leader>x", ':bd<CR>', { noremap = true, silent = true })
     end,
   },
   {
@@ -535,7 +536,7 @@ vim.keymap.set("n", "Q", "@qj")
 
 -- find replace on current word
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+-- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- create gofmt command
 vim.cmd('command! Gofmt execute "!go fmt %"')
