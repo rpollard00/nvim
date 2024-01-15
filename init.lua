@@ -501,6 +501,7 @@ vim.o.termguicolors = true
 vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 -- Attach bicep lsp to bicep files
 vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
+vim.cmd [[ autocmd BufNewFile,BufRead *.bicepparam set filetype=bicep-params ]]
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -609,9 +610,12 @@ require('nvim-treesitter.configs').setup {
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
 
-  ignore_install = {},
+  ignore_install = { "bicep" },
 
-  highlight = { enable = true },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = "bicep",
+  },
   indent = { enable = true },
   incremental_selection = {
     enable = true,
@@ -772,6 +776,9 @@ local bicep_lsp_bin = "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll"
 
 require 'lspconfig'.bicep.setup {
   cmd = { "dotnet", bicep_lsp_bin },
+  filetypes = { "bicep", "bicep-params" },
+  -- single_file_support = true,
+  rootdir = { ".git", "bicepconfig.json", },
 }
 -- ToggleTerm Terminal KeyMappings
 -- function _G.set_terminal_keymaps()
