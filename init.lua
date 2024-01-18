@@ -502,6 +502,7 @@ vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {
 -- Attach bicep lsp to bicep files
 vim.cmd [[ autocmd BufNewFile,BufRead *.bicep set filetype=bicep ]]
 vim.cmd [[ autocmd BufNewFile,BufRead *.bicepparam set filetype=bicep-params ]]
+vim.cmd [[ autocmd BufNewFile,BufRead *.tmpl set filetype=html ]]
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -739,6 +740,7 @@ local servers = {
   rust_analyzer = {},
   terraformls = {},
   tsserver = {},
+  html = {},
 
   lua_ls = {
     Lua = {
