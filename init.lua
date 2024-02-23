@@ -76,6 +76,10 @@ require('lazy').setup({
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
+  {
+    'mfussenegger/nvim-dap', -- Install nvim-dap
+    'leoluz/nvim-dap-go'
+  },
 
   -- Detect tabstop and  automatically
   'tpope/vim-sleuth',
