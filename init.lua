@@ -629,13 +629,13 @@ vim.keymap.set('n', '<leader>bp', function() require('dap').toggle_breakpoint() 
   { noremap = true, desc = "[B]reak[p]oint toggle" })
 
 -- Debugging Step Mappings
-vim.keymap.set('n', '<leader>si', function() require('dapui').step_into() end,
+vim.keymap.set('n', '<leader>si', function() require('dap').step_into() end,
   { noremap = true, silent = true, desc = "[S]tep [I]n (follow execution into functions)" })
-vim.keymap.set('n', '<leader>so', function() require('dapui').step_over() end,
+vim.keymap.set('n', '<leader>so', function() require('dap').step_over() end,
   { noremap = true, silent = true, desc = "[S]tep [O]ver (execute the next line)" })
-vim.keymap.set('n', '<leader>sn', function() require('dapui').step_out() end,
+vim.keymap.set('n', '<leader>sn', function() require('dap').step_out() end,
   { noremap = true, silent = true, desc = "[S]tep [N]ext (continue to the next line in the current scope)" })
-vim.keymap.set('n', '<leader>sr', function() require('dapui').step_out_target() end,
+vim.keymap.set('n', '<leader>sr', function() require('dap').step_out_target() end,
   { noremap = true, silent = true, desc = "[S]tep [R]eturn (execute until the current function returns)" })
 --
 -- vim.keymap.set('n', '<leader>sg', function()
