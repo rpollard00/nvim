@@ -304,6 +304,27 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',          opts = {} },
   {
+    'stevearc/conform.nvim',
+    opts = {},
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+          -- Conform will run multiple formatters sequentially
+          python = { "isort", "black" },
+          -- Use a sub-list to run only the first available formatter
+          javascript = { { "prettierd", "prettier" } },
+          html = { { "prettierd", "prettier" } },
+        },
+        format_on_save = {
+          -- These options will be passed to conform.format()
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+      })
+    end
+  },
+  {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -384,6 +405,14 @@ require('lazy').setup({
     main = "ibl",
     opts = {
     },
+  },
+
+  -- COLORIZER plugin
+  {
+    'NvChad/nvim-colorizer.lua',
+    config = function()
+      require 'colorizer'.setup()
+    end,
   },
 
 
@@ -779,6 +808,8 @@ local servers = {
   rust_analyzer = {},
   terraformls = {},
   tsserver = {},
+  eslint = {
+  },
 
   lua_ls = {
     Lua = {
