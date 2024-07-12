@@ -69,7 +69,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
-  -- Git related plugins
+  -- Girelated plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'tpope/vim-commentary',
@@ -79,6 +79,32 @@ require('lazy').setup({
     config = function()
       require('nvim-autopairs').setup {}
     end,
+  },
+  {
+    'mfussenegger/nvim-dap', -- Install nvim-dap
+  },
+  {
+    'rcarriga/nvim-dap-ui',
+    config = function()
+      require("dapui").setup()
+      local dap, dapui = require("dap"), require("dapui")
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+    end
+  },
+  {
+    'leoluz/nvim-dap-go',
+    config = true,
   },
 
   -- Detect tabstop and  automatically
@@ -642,7 +668,26 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>ps', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { noremap = true, desc = '[F]ile [B]rowser' })
+--
+-- Debugger Bindings
+-- Debug Session Bindings
+vim.keymap.set('n', '<leader>dg', function() require('dap').continue() end,
+  { noremap = true, desc = "[D]ebu[g] continue" })
+vim.keymap.set('n', '<leader>bp', function() require('dap').toggle_breakpoint() end,
+  { noremap = true, desc = "[B]reak[p]oint toggle" })
+
+-- Debugging Step Mappings
+vim.keymap.set('n', '<leader>si', function() require('dap').step_into() end,
+  { noremap = true, silent = true, desc = "[S]tep [I]n (follow execution into functions)" })
+vim.keymap.set('n', '<leader>so', function() require('dap').step_over() end,
+  { noremap = true, silent = true, desc = "[S]tep [O]ver (execute the next line)" })
+vim.keymap.set('n', '<leader>sn', function() require('dap').step_out() end,
+  { noremap = true, silent = true, desc = "[S]tep [N]ext (continue to the next line in the current scope)" })
+vim.keymap.set('n', '<leader>sr', function() require('dap').step_out_target() end,
+  { noremap = true, silent = true, desc = "[S]tep [R]eturn (execute until the current function returns)" })
+--
 vim.keymap.set('n', '<leader>o', ':Oil<CR>', { noremap = true, desc = '[O]il File Browser' })
+
 -- vim.keymap.set('n', '<leader>sg', function()
 -- local builtin = require('telescope.builtin')
 --   builtin.grep_string({ search = vim.fn.input("Grep > ") });
@@ -797,7 +842,9 @@ local servers = {
 }
 
 -- Setup neovim lua configuration
-require('neodev').setup()
+require('neodev').setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true },
+})
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
