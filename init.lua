@@ -75,8 +75,10 @@ require('lazy').setup({
   'tpope/vim-commentary',
   'tpope/vim-repeat',
   {
-    "windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup {} end
+    'windwp/nvim-autopairs',
+    config = function()
+      require('nvim-autopairs').setup {}
+    end,
   },
 
   -- Detect tabstop and  automatically
@@ -105,40 +107,40 @@ require('lazy').setup({
     opts = {},
     dependencies = { 'echasnovski/mini.icons' },
     config = function()
-      require("oil").setup({
+      require('oil').setup {
         default_file_explorer = true,
         columns = {
-          "icon",
-        }
-      })
+          'icon',
+        },
+      }
     end,
   },
   {
-    "folke/noice.nvim",
-    event = "VeryLazy",
+    'folke/noice.nvim',
+    event = 'VeryLazy',
     opts = {
       -- add any options here
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
+      'MunifTanjim/nui.nvim',
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
+      'rcarriga/nvim-notify',
     },
     config = function()
-      require("noice").setup({
+      require('noice').setup {
         lsp = {
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
+            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+            ['vim.lsp.util.stylize_markdown'] = true,
+            ['cmp.entry.get_documentation'] = true,
           },
         },
         cmdline = {
-          view = "cmdline",
+          view = 'cmdline',
         },
         -- you can enable a preset for easier configuration
         presets = {
@@ -148,14 +150,14 @@ require('lazy').setup({
           inc_rename = false,           -- enables an input dialog for inc-rename.nvim
           lsp_doc_border = true,        -- add a border to hover docs and signature help
         },
-      })
+      }
     end,
   },
   {
     'akinsho/toggleterm.nvim',
-    version = "*",
+    version = '*',
     opts = {
-      shade_terminals = false
+      shade_terminals = false,
     },
     -- keys = {
     --   -- { "<`>", "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm Float" },
@@ -163,50 +165,49 @@ require('lazy').setup({
     config = function()
       require('toggleterm').setup()
     end,
-
   },
-  "folke/twilight.nvim",
+  'folke/twilight.nvim',
   {
-    "folke/zen-mode.nvim",
-    cmd = "ZenMode",
+    'folke/zen-mode.nvim',
+    cmd = 'ZenMode',
     opts = {
       plugins = {
         gitsigns = true,
         tmux = true,
-        kitty = { enabled = false, font = "+2" },
+        kitty = { enabled = false, font = '+2' },
       },
     },
-    keys = { { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
+    keys = { { '<leader>z', '<cmd>ZenMode<cr>', desc = 'Zen Mode' } },
   },
   {
-    "nvimtools/none-ls.nvim",
+    'nvimtools/none-ls.nvim',
     dependencies = {
-      "nvim-lua/plenary.nvim"
+      'nvim-lua/plenary.nvim',
     },
     config = function()
-      local null_ls = require("null-ls")
+      local null_ls = require 'null-ls'
 
-      null_ls.setup({
+      null_ls.setup {
         sources = {
           null_ls.builtins.formatting.stylua,
           null_ls.builtins.completion.spell,
           -- require("none-ls.diagnostics.eslint"),
-          null_ls.builtins.formatting.prettier.with({
+          null_ls.builtins.formatting.prettier.with {
             filetypes = {
-              "javascript",
-              "typescript",
-              "typescriptreact",
-              "javascriptreact",
-              "css",
-              "scss",
-              "html",
-              "json",
-              "yaml",
-              "markdown",
-            }
-          })
-        }
-      })
+              'javascript',
+              'typescript',
+              'typescriptreact',
+              'javascriptreact',
+              'css',
+              'scss',
+              'html',
+              'json',
+              'yaml',
+              'markdown',
+            },
+          },
+        },
+      }
     end,
   },
   {
@@ -225,7 +226,7 @@ require('lazy').setup({
     },
   },
   {
-    "folke/flash.nvim",
+    'folke/flash.nvim',
     enabled = true,
     init = function()
       -- vim.keymap.set("n", "x", "<cmd>lua require('flash').jump()<cr>")
@@ -289,15 +290,15 @@ require('lazy').setup({
   --
   -- },
   {
-    "Wansmer/treesj",
+    'Wansmer/treesj',
     keys = {
-      { "J", "<cmd>TSJToggle<cr>", desc = "Join Toggle" },
+      { 'J', '<cmd>TSJToggle<cr>', desc = 'Join Toggle' },
     },
     opts = { use_default_keymaps = false, max_join_length = 150 },
   },
   {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    'nvim-telescope/telescope-file-browser.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
   },
   -- {
   --   "nvim-tree/nvim-tree.lua",
@@ -367,19 +368,19 @@ require('lazy').setup({
   -- },
   {
     'akinsho/bufferline.nvim',
-    version = "*",
+    version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('bufferline').setup()
-      vim.keymap.set('n', "<C-t>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<C-T>", ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>1", ':BufferLineGoToBuffer 1<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>2", ':BufferLineGoToBuffer 2<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>3", ':BufferLineGoToBuffer 3<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>4", ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>-", ':BufferLineMovePrev<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>=", ':BufferLineMoveNext<CR>', { noremap = true, silent = true })
-      vim.keymap.set('n', "<leader>x", ':bd<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<C-t>', ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<C-T>', ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>-', ':BufferLineMovePrev<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>=', ':BufferLineMoveNext<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>x', ':bd<CR>', { noremap = true, silent = true })
     end,
   },
   {
@@ -401,11 +402,9 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
-    main = "ibl",
-    opts = {
-    },
+    main = 'ibl',
+    opts = {},
   },
-
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',         opts = {} },
@@ -438,33 +437,35 @@ require('lazy').setup({
   {
     'alexghergh/nvim-tmux-navigation',
     config = function()
-      local nvim_tmux_nav = require('nvim-tmux-navigation')
+      local nvim_tmux_nav = require 'nvim-tmux-navigation'
 
       nvim_tmux_nav.setup {
-        disable_when_zoomed = true -- defaults to false
+        disable_when_zoomed = true, -- defaults to false
       }
 
-      vim.keymap.set('n', "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
-      vim.keymap.set('n', "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
-      vim.keymap.set('n', "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
-      vim.keymap.set('n', "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
+      vim.keymap.set('n', '<C-h>', nvim_tmux_nav.NvimTmuxNavigateLeft)
+      vim.keymap.set('n', '<C-j>', nvim_tmux_nav.NvimTmuxNavigateDown)
+      vim.keymap.set('n', '<C-k>', nvim_tmux_nav.NvimTmuxNavigateUp)
+      vim.keymap.set('n', '<C-l>', nvim_tmux_nav.NvimTmuxNavigateRight)
       -- vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
-      vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
-    end
+      vim.keymap.set('n', '<C-Space>', nvim_tmux_nav.NvimTmuxNavigateNext)
+    end,
   },
-  -- {
-  --   "ellisonleao/gruvbox.nvim",
-  --   priority = 1000,
-  --   config = function()
-  --     vim.o.terminal_colors = true
-  --     vim.o.background = "dark"
-  --     vim.o.contrast = "hard"
-  --     vim.o.invert_selection = true
-  --     vim.cmd('au ColorScheme * hi clear SignColumn')
-  --     vim.cmd.colorscheme 'gruvbox'
-  --   end,
-  --   opts = ...
-  -- },
+  {
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
+    config = function()
+      require('gruvbox').setup {
+        terminal_colors = true,
+        background = 'dark',
+        contrast = 'hard',
+        invert_selection = true,
+      }
+
+      vim.cmd [[colorscheme gruvbox]]
+    end,
+    opts = ...,
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -509,8 +510,8 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
 vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
+vim.opt.signcolumn = 'yes'
+vim.opt.isfname:append '@-@'
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
@@ -556,39 +557,39 @@ vim.cmd [[ autocmd BufNewFile,BufRead *.tmpl set filetype=html ]]
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', '<leader>h', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
 -- allow moving selected block in visual mode
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 -- keep cursor centered when jumping half page
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
 
 -- keep search terms centered
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
 
 vim.keymap.set('n', '`', '<cmd>ToggleTerm direction=float<CR>', { noremap = true, silent = true })
 vim.keymap.set('t', '`', '<cmd>ToggleTerm direction=float<CR>', { noremap = true, silent = true })
 
 -- greatest remap ever, when pasting over a block
 -- keep pasting and don't put the replaced term into the buffer
-vim.keymap.set("x", "<leader>p", [["_dP]])
+vim.keymap.set('x', '<leader>p', [["_dP]])
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 -- kill capital Q which quits?
-vim.keymap.set("n", "Q", "@qj")
+vim.keymap.set('n', 'Q', '@qj')
 
 -- find replace on current word
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set('n', '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 -- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 -- create gofmt command
-vim.cmd('command! Gofmt execute "!go fmt %"')
-vim.keymap.set("n", "<leader>gf", ":Gofmt<CR>")
+vim.cmd 'command! Gofmt execute "!go fmt %"'
+vim.keymap.set('n', '<leader>gf', ':Gofmt<CR>')
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -619,7 +620,6 @@ require('telescope').setup {
       },
     },
   },
-
 }
 
 -- Enable telescope fzf native, if installed
@@ -676,9 +676,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
 
-
-  modules = {
-  },
+  modules = {},
   textobjects = {
     select = {
       enable = true,
@@ -763,7 +761,6 @@ local on_attach = function(_, bufnr)
   -- vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
   nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
@@ -823,13 +820,13 @@ mason_lspconfig.setup_handlers {
   end,
 }
 -- local dotnet_7_bin = "/usr/local/opt/dotnet-sdk-7.0.404-osx-x64/dotnet"
-local bicep_lsp_bin = "/usr/local/bin/bicep-langserver/Bicep.LangServer.dll"
+local bicep_lsp_bin = '/usr/local/bin/bicep-langserver/Bicep.LangServer.dll'
 
-require 'lspconfig'.bicep.setup {
-  cmd = { "dotnet", bicep_lsp_bin },
-  filetypes = { "bicep", "bicep-params" },
+require('lspconfig').bicep.setup {
+  cmd = { 'dotnet', bicep_lsp_bin },
+  filetypes = { 'bicep', 'bicep-params' },
   -- single_file_support = true,
-  rootdir = { ".git", "bicepconfig.json", },
+  rootdir = { '.git', 'bicepconfig.json' },
 }
 -- ToggleTerm Terminal KeyMappings
 -- function _G.set_terminal_keymaps()
