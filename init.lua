@@ -44,7 +44,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 local function set_platform_specific_options()
-  if vim.fn.has("win32") == 1 then
+  if vim.fn.has 'win32' == 1 then
     vim.opt.shellslash = true
     vim.opt.shellcmdflag = '/d'
     -- elseif vim.fn.has("unix") == 1 then
@@ -96,25 +96,25 @@ require('lazy').setup({
     'mfussenegger/nvim-dap', -- Install nvim-dap
   },
   {
-    'nvim-neotest/nvim-nio'
+    'nvim-neotest/nvim-nio',
   },
   {
-    "iabdelkareem/csharp.nvim",
+    'iabdelkareem/csharp.nvim',
     dependencies = {
-      "williamboman/mason.nvim", -- Required, automatically installs omnisharp
-      "mfussenegger/nvim-dap",
-      "Tastyep/structlog.nvim",  -- Optional, but highly recommended for debugging
+      'williamboman/mason.nvim', -- Required, automatically installs omnisharp
+      'mfussenegger/nvim-dap',
+      'Tastyep/structlog.nvim',  -- Optional, but highly recommended for debugging
     },
     config = function()
-      require("mason").setup() -- Mason setup must run before csharp
-      require("csharp").setup()
-    end
+      require('mason').setup() -- Mason setup must run before csharp
+      require('csharp').setup()
+    end,
   },
   {
     'rcarriga/nvim-dap-ui',
     config = function()
-      require("dapui").setup()
-      local dap, dapui = require("dap"), require("dapui")
+      require('dapui').setup()
+      local dap, dapui = require 'dap', require 'dapui'
       dap.listeners.before.attach.dapui_config = function()
         dapui.open()
       end
@@ -127,7 +127,7 @@ require('lazy').setup({
       dap.listeners.before.event_exited.dapui_config = function()
         dapui.close()
       end
-    end
+    end,
   },
   {
     'leoluz/nvim-dap-go',
@@ -381,22 +381,22 @@ require('lazy').setup({
     'stevearc/conform.nvim',
     opts = {},
     config = function()
-      require("conform").setup({
+      require('conform').setup {
         formatters_by_ft = {
-          lua = { "stylua" },
+          lua = { 'stylua' },
           -- Conform will run multiple formatters sequentially
-          python = { "isort", "black" },
+          python = { 'isort', 'black' },
           -- Use a sub-list to run only the first available formatter
-          javascript = { { "prettierd", "prettier" } },
-          html = { { "prettierd", "prettier" } },
+          javascript = { { 'prettierd', 'prettier' } },
+          html = { { 'prettierd', 'prettier' } },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
           timeout_ms = 500,
           lsp_fallback = true,
         },
-      })
-    end
+      }
+    end,
   },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -483,7 +483,7 @@ require('lazy').setup({
   {
     'NvChad/nvim-colorizer.lua',
     config = function()
-      require 'colorizer'.setup()
+      require('colorizer').setup()
     end,
   },
   -- "gc" to comment visual regions/lines
@@ -725,20 +725,26 @@ vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { noremap = tru
 --
 -- Debugger Bindings
 -- Debug Session Bindings
-vim.keymap.set('n', '<leader>dg', function() require('dap').continue() end,
-  { noremap = true, desc = "[D]ebu[g] continue" })
-vim.keymap.set('n', '<leader>bp', function() require('dap').toggle_breakpoint() end,
-  { noremap = true, desc = "[B]reak[p]oint toggle" })
+vim.keymap.set('n', '<leader>dg', function()
+  require('dap').continue()
+end, { noremap = true, desc = '[D]ebu[g] continue' })
+vim.keymap.set('n', '<leader>bp', function()
+  require('dap').toggle_breakpoint()
+end, { noremap = true, desc = '[B]reak[p]oint toggle' })
 
 -- Debugging Step Mappings
-vim.keymap.set('n', '<leader>si', function() require('dap').step_into() end,
-  { noremap = true, silent = true, desc = "[S]tep [I]n (follow execution into functions)" })
-vim.keymap.set('n', '<leader>so', function() require('dap').step_over() end,
-  { noremap = true, silent = true, desc = "[S]tep [O]ver (execute the next line)" })
-vim.keymap.set('n', '<leader>sn', function() require('dap').step_out() end,
-  { noremap = true, silent = true, desc = "[S]tep [N]ext (continue to the next line in the current scope)" })
-vim.keymap.set('n', '<leader>sr', function() require('dap').step_out_target() end,
-  { noremap = true, silent = true, desc = "[S]tep [R]eturn (execute until the current function returns)" })
+vim.keymap.set('n', '<leader>si', function()
+  require('dap').step_into()
+end, { noremap = true, silent = true, desc = '[S]tep [I]n (follow execution into functions)' })
+vim.keymap.set('n', '<leader>so', function()
+  require('dap').step_over()
+end, { noremap = true, silent = true, desc = '[S]tep [O]ver (execute the next line)' })
+vim.keymap.set('n', '<leader>sn', function()
+  require('dap').step_out()
+end, { noremap = true, silent = true, desc = '[S]tep [N]ext (continue to the next line in the current scope)' })
+vim.keymap.set('n', '<leader>sr', function()
+  require('dap').step_out_target()
+end, { noremap = true, silent = true, desc = '[S]tep [R]eturn (execute until the current function returns)' })
 --
 vim.keymap.set('n', '<leader>o', ':Oil<CR>', { noremap = true, desc = '[O]il File Browser' })
 
@@ -881,12 +887,15 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  zls = {},
-  gopls = {},
-  rust_analyzer = {},
-  terraformls = {},
-  tsserver = {},
+  ansiblels = {},
+  bicep = {},
+  black = {},
+  csharp_ls = {},
+  cssls = {},
+  emmet_language_server = {},
   eslint = {},
+  flake8 = {},
+  gopls = {},
   html = {},
   lua_ls = {
     Lua = {
@@ -894,12 +903,23 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+  netcoredbg = {},
+  omnisharp = {},
+  prettier = {},
+  pylint = {},
+  pyright = {},
+  rust_analyzer = {},
+  stylua = {},
+  terraformls = {},
+  tsserver = {},
+  typst_lsp = {},
+  zls = {},
 }
 
 -- Setup neovim lua configuration
-require('neodev').setup({
-  library = { plugins = { "nvim-dap-ui" }, types = true },
-})
+require('neodev').setup {
+  library = { plugins = { 'nvim-dap-ui' }, types = true },
+}
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
