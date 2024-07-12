@@ -42,6 +42,8 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.opt.shellcmdflag = '/d'
+vim.opt.shellslash = true
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -97,6 +99,19 @@ require('lazy').setup({
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { 'echasnovski/mini.icons' },
+    config = function()
+      require("oil").setup({
+        default_file_explorer = true,
+        columns = {
+          "icon",
+        }
+      })
+    end,
   },
   {
     "folke/noice.nvim",
@@ -162,6 +177,37 @@ require('lazy').setup({
       },
     },
     keys = { { "<leader>z", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim"
+    },
+    config = function()
+      local null_ls = require("null-ls")
+
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.stylua,
+          null_ls.builtins.completion.spell,
+          -- require("none-ls.diagnostics.eslint"),
+          null_ls.builtins.formatting.prettier.with({
+            filetypes = {
+              "javascript",
+              "typescript",
+              "typescriptreact",
+              "javascriptreact",
+              "css",
+              "scss",
+              "html",
+              "json",
+              "yaml",
+              "markdown",
+            }
+          })
+        }
+      })
+    end,
   },
   {
     -- Autocompletion
@@ -406,19 +452,19 @@ require('lazy').setup({
       vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
     end
   },
-  {
-    "ellisonleao/gruvbox.nvim",
-    priority = 1000,
-    config = function()
-      vim.o.terminal_colors = true
-      vim.o.background = "dark"
-      vim.o.contrast = "hard"
-      vim.o.invert_selection = true
-      vim.cmd('au ColorScheme * hi clear SignColumn')
-      vim.cmd.colorscheme 'gruvbox'
-    end,
-    opts = ...
-  },
+  -- {
+  --   "ellisonleao/gruvbox.nvim",
+  --   priority = 1000,
+  --   config = function()
+  --     vim.o.terminal_colors = true
+  --     vim.o.background = "dark"
+  --     vim.o.contrast = "hard"
+  --     vim.o.invert_selection = true
+  --     vim.cmd('au ColorScheme * hi clear SignColumn')
+  --     vim.cmd.colorscheme 'gruvbox'
+  --   end,
+  --   opts = ...
+  -- },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -457,7 +503,7 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+-- vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
@@ -596,6 +642,7 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>ps', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { noremap = true, desc = '[F]ile [B]rowser' })
+vim.keymap.set('n', '<leader>o', ':Oil<CR>', { noremap = true, desc = '[O]il File Browser' })
 -- vim.keymap.set('n', '<leader>sg', function()
 -- local builtin = require('telescope.builtin')
 --   builtin.grep_string({ search = vim.fn.input("Grep > ") });
@@ -603,19 +650,20 @@ vim.keymap.set('n', '<leader>fb', ':Telescope file_browser<CR>', { noremap = tru
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
+-- require 'nvim-treesitter.install'.prefer_git = false
+-- require 'nvim-treesitter.install'.compilers = { "zig" }
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'bicep', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
 
-  sync_install = true,
+  sync_install = false,
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = true,
+  auto_install = false,
 
-  ignore_install = { "bicep" },
+  ignore_install = {},
 
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = "bicep",
   },
   indent = { enable = true },
   incremental_selection = {
@@ -627,6 +675,7 @@ require('nvim-treesitter.configs').setup {
       node_decremental = '<M-space>',
     },
   },
+
 
   modules = {
   },
