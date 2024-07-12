@@ -84,6 +84,21 @@ require('lazy').setup({
     'mfussenegger/nvim-dap', -- Install nvim-dap
   },
   {
+    'nvim-neotest/nvim-nio'
+  },
+  {
+    "iabdelkareem/csharp.nvim",
+    dependencies = {
+      "williamboman/mason.nvim", -- Required, automatically installs omnisharp
+      "mfussenegger/nvim-dap",
+      "Tastyep/structlog.nvim",  -- Optional, but highly recommended for debugging
+    },
+    config = function()
+      require("mason").setup() -- Mason setup must run before csharp
+      require("csharp").setup()
+    end
+  },
+  {
     'rcarriga/nvim-dap-ui',
     config = function()
       require("dapui").setup()
@@ -351,6 +366,27 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',          opts = {} },
   {
+    'stevearc/conform.nvim',
+    opts = {},
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+          -- Conform will run multiple formatters sequentially
+          python = { "isort", "black" },
+          -- Use a sub-list to run only the first available formatter
+          javascript = { { "prettierd", "prettier" } },
+          html = { { "prettierd", "prettier" } },
+        },
+        format_on_save = {
+          -- These options will be passed to conform.format()
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+      })
+    end
+  },
+  {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -431,7 +467,13 @@ require('lazy').setup({
     main = 'ibl',
     opts = {},
   },
-
+  -- COLORIZER plugin
+  {
+    'NvChad/nvim-colorizer.lua',
+    config = function()
+      require 'colorizer'.setup()
+    end,
+  },
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim',         opts = {} },
 
@@ -791,8 +833,8 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -827,12 +869,13 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
+  zls = {},
   gopls = {},
   rust_analyzer = {},
   terraformls = {},
   tsserver = {},
+  eslint = {},
   html = {},
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
