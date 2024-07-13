@@ -209,17 +209,22 @@ require('lazy').setup({
   {
     'akinsho/toggleterm.nvim',
     version = '*',
+    lazy = false,
     opts = {
+
       shade_terminals = false,
     },
-    -- keys = {
-    --   -- { "<`>", "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm Float" },
-    -- },
+    keys = {
+      { '<`>', '<cmd>ToggleTerm direction=float<cr>', desc = 'ToggleTerm Float' },
+    },
     config = function()
       require('toggleterm').setup()
     end,
   },
-  'folke/twilight.nvim',
+  {
+    'folke/twilight.nvim',
+    opts = {},
+  },
   {
     'folke/zen-mode.nvim',
     cmd = 'ZenMode',
@@ -376,28 +381,35 @@ require('lazy').setup({
   --   end,
   -- },
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',          opts = {} },
   {
-    'stevearc/conform.nvim',
-    opts = {},
-    config = function()
-      require('conform').setup {
-        formatters_by_ft = {
-          lua = { 'stylua' },
-          -- Conform will run multiple formatters sequentially
-          python = { 'isort', 'black' },
-          -- Use a sub-list to run only the first available formatter
-          javascript = { { 'prettierd', 'prettier' } },
-          html = { { 'prettierd', 'prettier' } },
-        },
-        format_on_save = {
-          -- These options will be passed to conform.format()
-          timeout_ms = 500,
-          lsp_fallback = true,
-        },
-      }
-    end,
+    'folke/which-key.nvim',
+    opts = {
+      plugins = {
+        marks = false,
+      },
+    },
   },
+  -- {
+  --   'stevearc/conform.nvim',
+  --   opts = {},
+  --   config = function()
+  --     require('conform').setup {
+  --       formatters_by_ft = {
+  --         lua = { 'stylua' },
+  --         -- Conform will run multiple formatters sequentially
+  --         python = { 'isort', 'black' },
+  --         -- Use a sub-list to run only the first available formatter
+  --         javascript = { { 'prettierd', 'prettier' } },
+  --         html = { { 'prettierd', 'prettier' } },
+  --       },
+  --       format_on_save = {
+  --         -- These options will be passed to conform.format()
+  --         timeout_ms = 500,
+  --         lsp_fallback = true,
+  --       },
+  --     }
+  --   end,
+  -- },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -423,23 +435,6 @@ require('lazy').setup({
     'stevearc/dressing.nvim',
     opts = {},
   },
-  -- {
-  --   -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'onedark'
-  --   end,
-  -- },
-
-  -- {
-  --   -- Theme inspired by rose-pine
-  --   'rose-pine/neovim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'rose-pine'
-  --   end,
-  -- },
   {
     'akinsho/bufferline.nvim',
     version = '*',
@@ -531,6 +526,24 @@ require('lazy').setup({
       vim.keymap.set('n', '<C-Space>', nvim_tmux_nav.NvimTmuxNavigateNext)
     end,
   },
+  -- Themes
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'onedark'
+  --   end,
+  -- },
+
+  -- {
+  --   -- Theme inspired by rose-pine
+  --   'rose-pine/neovim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'rose-pine'
+  --   end,
+  -- },
   {
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
