@@ -146,6 +146,7 @@ require('lazy').setup({
       -- Automatically install LSPs to stdpath for neovim
       { 'williamboman/mason.nvim', config = true },
       'williamboman/mason-lspconfig.nvim',
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -889,12 +890,10 @@ local servers = {
   -- clangd = {},
   ansiblels = {},
   bicep = {},
-  black = {},
   csharp_ls = {},
   cssls = {},
   emmet_language_server = {},
   eslint = {},
-  flake8 = {},
   gopls = {},
   html = {},
   lua_ls = {
@@ -903,13 +902,10 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  netcoredbg = {},
   omnisharp = {},
   prettier = {},
-  pylint = {},
   pyright = {},
   rust_analyzer = {},
-  stylua = {},
   terraformls = {},
   tsserver = {},
   typst_lsp = {},
@@ -925,23 +921,27 @@ require('neodev').setup {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
--- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
+-- linters and non-lsp tools go here for Mason to install
+local ensure_installed = vim.tbl_keys(servers or {})
+vim.list_extend(ensure_installed, {
+  'netcoredbg',
+  'prettier',
+  'stylua',
+})
 
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
+require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
+require('mason-lspconfig').setup {
+  handlers = {
+    function(server_name)
+      local server = servers[server_name] or {}
+
+      server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      require('lspconfig')[server_name].setup(server)
+    end,
+  },
 }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-    }
-  end,
-}
--- local dotnet_7_bin = "/usr/local/opt/dotnet-sdk-7.0.404-osx-x64/dotnet"
 local bicep_lsp_bin = '/usr/local/bin/bicep-langserver/Bicep.LangServer.dll'
 
 require('lspconfig').bicep.setup {
