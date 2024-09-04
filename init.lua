@@ -98,18 +98,18 @@ require('lazy').setup({
   {
     'nvim-neotest/nvim-nio',
   },
-  {
-    'iabdelkareem/csharp.nvim',
-    dependencies = {
-      'williamboman/mason.nvim', -- Required, automatically installs omnisharp
-      'mfussenegger/nvim-dap',
-      'Tastyep/structlog.nvim',  -- Optional, but highly recommended for debugging
-    },
-    config = function()
-      require('mason').setup() -- Mason setup must run before csharp
-      require('csharp').setup()
-    end,
-  },
+  -- {
+  --   'iabdelkareem/csharp.nvim',
+  --   dependencies = {
+  --     'williamboman/mason.nvim', -- Required, automatically installs omnisharp
+  --     'mfussenegger/nvim-dap',
+  --     'Tastyep/structlog.nvim',  -- Optional, but highly recommended for debugging
+  --   },
+  --   config = function()
+  --     require('mason').setup() -- Mason setup must run before csharp
+  --     require('csharp').setup()
+  --   end,
+  -- },
   {
     'rcarriga/nvim-dap-ui',
     config = function()
@@ -348,6 +348,13 @@ require('lazy').setup({
   --   end,
   --
   -- },
+  {
+    'seblj/roslyn.nvim',
+    ft = 'cs',
+    opts = {
+      -- your configuration comes here; leave empty for default settings
+    },
+  },
   {
     'Wansmer/treesj',
     keys = {
@@ -903,7 +910,7 @@ local servers = {
   -- clangd = {},
   ansiblels = {},
   bicep = {},
-  csharp_ls = {},
+  -- csharp_ls = {},
   cssls = {},
   emmet_language_server = {},
   eslint = {},
@@ -915,7 +922,6 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  omnisharp = {},
   prettier = {},
   pyright = {},
   rust_analyzer = {},
