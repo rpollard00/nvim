@@ -57,6 +57,10 @@ end
 
 set_platform_specific_options()
 
+P = function(v)
+  vim.print(v)
+end
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -88,8 +92,6 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  print 'ON ATTACH IS RUNNING'
-
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
@@ -113,6 +115,12 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  -- if client.server_capabilities.signatureHelpProvider then
+  --   require('lsp-overloads').setup(client, {})
+  --   nmap('<C-I>', ':LspOverloadsSignature<CR>', 'Overloads Signature Documentation')
+  --   vim.api.nvim_set_keymap('i', '<C-I>', '<cmd>LspOverloadsSignature<CR>', { noremap = true, silent = true })
+  -- end
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
@@ -123,8 +131,26 @@ end
 --
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
+--
+local DEV_MODE = true
+local dev_plugins = nil
+if DEV_MODE then
+  dev_plugins = {
+    {
+      dir = '~/projects/neovim/plugins/stackmap.nvim',
+    },
+    {
+      dir = '~/projects/neovim/plugins/cutlass.nvim',
+    },
+    -- {
+    --   dir = '~/projects/neovim/plugins/rzls2.nvim',
+    -- },
+  }
+end
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  -- local dev plugins
+  dev_plugins,
 
   -- Girelated plugins
   'tpope/vim-fugitive',
@@ -138,23 +164,14 @@ require('lazy').setup({
     end,
   },
   {
+    'nvim-lua/plenary.nvim',
+  },
+  {
     'mfussenegger/nvim-dap', -- Install nvim-dap
   },
   {
     'nvim-neotest/nvim-nio',
   },
-  -- {
-  --   'iabdelkareem/csharp.nvim',
-  --   dependencies = {
-  --     'williamboman/mason.nvim', -- Required, automatically installs omnisharp
-  --     'mfussenegger/nvim-dap',
-  --     'Tastyep/structlog.nvim',  -- Optional, but highly recommended for debugging
-  --   },
-  --   config = function()
-  --     require('mason').setup() -- Mason setup must run before csharp
-  --     require('csharp').setup()
-  --   end,
-  -- },
   {
     'rcarriga/nvim-dap-ui',
     config = function()
@@ -198,7 +215,45 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      --
+
+      {
+        'folke/lazydev.nvim',
+        ft = 'lua', -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+          },
+        },
+      },
+      { 'Bilal2453/luvit-meta', lazy = true }, -- optional `vim.uv` typings
+      {                                        -- optional completion source for require statements and module annotations
+        'hrsh7th/nvim-cmp',
+        opts = function(_, opts)
+          opts.sources = opts.sources or {}
+          table.insert(opts.sources, {
+            name = 'lazydev',
+            group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+          })
+        end,
+      },
+    },
+  },
+  {
+    -- Autocompletion
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
     },
   },
   {
@@ -315,21 +370,6 @@ require('lazy').setup({
     end,
   },
   {
-    -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-    },
-  },
-  {
     'folke/flash.nvim',
     enabled = true,
     init = function()
@@ -403,6 +443,11 @@ require('lazy').setup({
       -- your configuration comes here; leave empty for default settings
     },
   },
+  -- {
+  --   'moreiraio/razor.nvim',
+  --   ft = 'razor',
+  --   dependencies = { 'seblj/roslyn.nvim' },
+  -- },
   {
     'Wansmer/treesj',
     keys = {
@@ -631,6 +676,7 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
+require('cutlass').setup()
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -927,20 +973,18 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  prettier = {},
+  -- prettier = {},
   pyright = {},
   rust_analyzer = {},
   terraformls = {},
-  tsserver = {},
   typst_lsp = {},
   zls = {},
 }
 
 -- Setup neovim lua configuration
-require('neodev').setup {
-  library = { plugins = { 'nvim-dap-ui' }, types = true },
-}
-
+-- require('neodev').setup {
+--   library = { plugins = { 'nvim-dap-ui' }, types = true },
+-- }
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -987,10 +1031,6 @@ require('mason-lspconfig').setup {
 }
 
 local bicep_lsp_bin = '/usr/local/bin/bicep-langserver/Bicep.LangServer.dll'
-
-require('lspconfig').roslyn.setup {
-  on_attach = on_attach,
-}
 
 require('lspconfig').bicep.setup {
   cmd = { 'dotnet', bicep_lsp_bin },
