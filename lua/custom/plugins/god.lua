@@ -85,37 +85,6 @@ return {
             keys = { { '<leader>z', '<cmd>ZenMode<cr>', desc = 'Zen Mode' } },
         },
         {
-            'nvimtools/none-ls.nvim',
-            dependencies = {
-                'nvim-lua/plenary.nvim',
-            },
-            config = function()
-                local null_ls = require 'null-ls'
-
-                null_ls.setup {
-                    sources = {
-                        null_ls.builtins.formatting.stylua,
-                        null_ls.builtins.completion.spell,
-                        -- require("none-ls.diagnostics.eslint"),
-                        null_ls.builtins.formatting.prettier.with {
-                            filetypes = {
-                                'javascript',
-                                'typescript',
-                                'typescriptreact',
-                                'javascriptreact',
-                                'css',
-                                'scss',
-                                'html',
-                                'json',
-                                'yaml',
-                                'markdown',
-                            },
-                        },
-                    },
-                }
-            end,
-        },
-        {
             'folke/flash.nvim',
             enabled = true,
             init = function()
@@ -367,52 +336,5 @@ return {
                 vim.keymap.set('n', '<C-Space>', nvim_tmux_nav.NvimTmuxNavigateNext)
             end,
         },
-        -- Themes
-        -- {
-        --   -- Theme inspired by Atom
-        --   'navarasu/onedark.nvim',
-        --   priority = 1000,
-        --   config = function()
-        --     vim.cmd.colorscheme 'onedark'
-        --   end,
-        -- },
-
-        -- {
-        --   -- Theme inspired by rose-pine
-        --   'rose-pine/neovim',
-        --   priority = 1000,
-        --   config = function()
-        --     vim.cmd.colorscheme 'rose-pine'
-        --   end,
-        -- },
-        {
-            'ellisonleao/gruvbox.nvim',
-            priority = 1000,
-            config = function()
-                require('gruvbox').setup {
-                    terminal_colors = true,
-                    background = 'dark',
-                    contrast = 'hard',
-                    invert_selection = true,
-                }
-
-                vim.cmd [[colorscheme gruvbox]]
-            end,
-            opts = ...,
-        },
-
-        -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-        --       These are some example plugins that I've included in the kickstart repository.
-        --       Uncomment any of the lines below to enable them.
-        require 'kickstart.plugins.autoformat',
-        -- require 'kickstart.plugins.debug',
-
-        -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-        --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-        --    up-to-date with whatever is in the kickstart repo.
-        --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-        --
-        --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-        -- { import = 'custom.plugins' },
     },
 }
