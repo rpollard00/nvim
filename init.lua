@@ -77,7 +77,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -92,6 +92,21 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  local function toggle_inlay_hints()
+    if vim.g.inlay_hints_visible then
+      vim.g.inlay_hints_visible = false
+      vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+    else
+      if client.server_capabilities.inlayHintProvider then
+        vim.g.inlay_hints_visible = true
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      else
+        print 'no inlay hints available'
+      end
+    end
+  end
+
+  nmap('<leader>ih', toggle_inlay_hints, '[I]nlay [H]ints')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
 
@@ -132,7 +147,7 @@ end
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 --
-local DEV_MODE = true
+local DEV_MODE = false
 local dev_plugins = nil
 if DEV_MODE then
   dev_plugins = {
@@ -142,27 +157,18 @@ if DEV_MODE then
     {
       dir = '~/projects/neovim/plugins/cutlass.nvim',
     },
-    -- {
-    --   dir = '~/projects/neovim/plugins/rzls2.nvim',
-    -- },
   }
 end
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
   -- local dev plugins
-  dev_plugins,
+  dev_plugins or {},
 
   -- Girelated plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'tpope/vim-commentary',
   'tpope/vim-repeat',
-  {
-    'windwp/nvim-autopairs',
-    config = function()
-      require('nvim-autopairs').setup {}
-    end,
-  },
   {
     'nvim-lua/plenary.nvim',
   },
@@ -438,16 +444,34 @@ require('lazy').setup({
     ft = 'cs',
     opts = {
       config = {
+        settings = {
+          ['csharp|inlay_hints'] = {
+            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+            csharp_enable_inlay_hints_for_types = true,
+            dotnet_enable_inlay_hints_for_indexer_parameters = true,
+            dotnet_enable_inlay_hints_for_literal_parameters = true,
+            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+            dotnet_enable_inlay_hints_for_other_parameters = true,
+            dotnet_enable_inlay_hints_for_parameters = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
+            dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
+          },
+          ['csharp|code_lens'] = {
+            dotnet_enable_references_code_lens = true,
+          },
+          ['csharp|background_analysis'] = {
+            dotnet_analyzer_diagnostics_scope = 'fullSolution',
+            dotnet_compiler_diagnostics_scope = 'fullSolution',
+          },
+        },
         on_attach = on_attach,
       },
       -- your configuration comes here; leave empty for default settings
     },
   },
-  -- {
-  --   'moreiraio/razor.nvim',
-  --   ft = 'razor',
-  --   dependencies = { 'seblj/roslyn.nvim' },
-  -- },
   {
     'Wansmer/treesj',
     keys = {
@@ -676,7 +700,7 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
-require('cutlass').setup()
+-- require('cutlass').setup()
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -973,11 +997,13 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+  ocamllsp = {},
   -- prettier = {},
   pyright = {},
   rust_analyzer = {},
   terraformls = {},
   typst_lsp = {},
+  ts_ls = {},
   zls = {},
 }
 
