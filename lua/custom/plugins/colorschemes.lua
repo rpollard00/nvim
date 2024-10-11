@@ -11,6 +11,7 @@ return {
                     contrast = 'hard',
                     invert_selection = true,
                 }
+                vim.cmd [[colorscheme gruvbox]]
             end,
             opts = ...,
         },

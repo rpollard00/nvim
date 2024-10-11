@@ -1,3 +1,64 @@
+-- TODO refactor into Autocmd
+local on_attach = function(client, bufnr)
+    local nmap = function(keys, func, desc)
+        if desc then
+            desc = 'LSP: ' .. desc
+        end
+
+        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    end
+
+    local function toggle_inlay_hints()
+        if vim.g.inlay_hints_visible then
+            vim.g.inlay_hints_visible = false
+            vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+        else
+            if client.server_capabilities.inlayHintProvider then
+                vim.g.inlay_hints_visible = true
+                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            else
+                print 'no inlay hints available'
+            end
+        end
+    end
+
+    nmap('<leader>ih', toggle_inlay_hints, '[I]nlay [H]ints')
+    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+    nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+
+    nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+    nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+    nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+    nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+    -- See `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    -- vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
+    nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+    -- Lesser used LSP functionality
+    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+    nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+    nmap('<leader>wl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, '[W]orkspace [L]ist Folders')
+
+    -- if client.server_capabilities.signatureHelpProvider then
+    --   require('lsp-overloads').setup(client, {})
+    --   nmap('<C-I>', ':LspOverloadsSignature<CR>', 'Overloads Signature Documentation')
+    --   vim.api.nvim_set_keymap('i', '<C-I>', '<cmd>LspOverloadsSignature<CR>', { noremap = true, silent = true })
+    -- end
+
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+        vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
+end
+
+
 return {
     {
         {
@@ -40,65 +101,6 @@ return {
                 },
             },
             config = function()
-                local on_attach = function(client, bufnr)
-                    local nmap = function(keys, func, desc)
-                        if desc then
-                            desc = 'LSP: ' .. desc
-                        end
-
-                        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-                    end
-
-                    local function toggle_inlay_hints()
-                        if vim.g.inlay_hints_visible then
-                            vim.g.inlay_hints_visible = false
-                            vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-                        else
-                            if client.server_capabilities.inlayHintProvider then
-                                vim.g.inlay_hints_visible = true
-                                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-                            else
-                                print 'no inlay hints available'
-                            end
-                        end
-                    end
-
-                    nmap('<leader>ih', toggle_inlay_hints, '[I]nlay [H]ints')
-                    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-                    nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-                    nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-                    nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-                    nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-                    nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-                    nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-                    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols,
-                        '[W]orkspace [S]ymbols')
-
-                    -- See `:help K` for why this keymap
-                    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-                    -- vim.api.nvim_set_keymap("i", "<C-sw>", '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
-                    nmap('<C-i>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-                    -- Lesser used LSP functionality
-                    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-                    nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-                    nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-                    nmap('<leader>wl', function()
-                        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                    end, '[W]orkspace [L]ist Folders')
-
-                    -- if client.server_capabilities.signatureHelpProvider then
-                    --   require('lsp-overloads').setup(client, {})
-                    --   nmap('<C-I>', ':LspOverloadsSignature<CR>', 'Overloads Signature Documentation')
-                    --   vim.api.nvim_set_keymap('i', '<C-I>', '<cmd>LspOverloadsSignature<CR>', { noremap = true, silent = true })
-                    -- end
-
-                    -- Create a command `:Format` local to the LSP buffer
-                    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-                        vim.lsp.buf.format()
-                    end, { desc = 'Format current buffer with LSP' })
-                end
                 local capabilities = vim.lsp.protocol.make_client_capabilities()
                 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
@@ -106,7 +108,11 @@ return {
                 local servers = {
                     -- clangd = {},
                     ansiblels = {},
-                    bicep = {},
+                    bicep = {
+                          cmd = { 'dotnet', '/usr/local/bin/bicep-langserver/Bicep.LangServer.dll' },
+                          filetypes = { 'bicep', 'bicep-params' },
+                          rootdir = { '.git', 'bicepconfig.json' },
+                    },
                     -- csharp_ls = {},
                     cssls = {},
                     emmet_language_server = {},
@@ -237,6 +243,40 @@ return {
                     },
                 }
             end,
+        },
+        {
+            -- This is the roslyn lsp for C# - it doesn't like to be standard
+            'seblj/roslyn.nvim',
+            ft = 'cs',
+            opts = {
+                config = {
+                    settings = {
+                        ['csharp|inlay_hints'] = {
+                            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+                            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+                            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+                            csharp_enable_inlay_hints_for_types = true,
+                            dotnet_enable_inlay_hints_for_indexer_parameters = true,
+                            dotnet_enable_inlay_hints_for_literal_parameters = true,
+                            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+                            dotnet_enable_inlay_hints_for_other_parameters = true,
+                            dotnet_enable_inlay_hints_for_parameters = true,
+                            dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
+                            dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
+                            dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
+                        },
+                        ['csharp|code_lens'] = {
+                            dotnet_enable_references_code_lens = true,
+                        },
+                        ['csharp|background_analysis'] = {
+                            dotnet_analyzer_diagnostics_scope = 'fullSolution',
+                            dotnet_compiler_diagnostics_scope = 'fullSolution',
+                        },
+                    },
+                    on_attach = on_attach,
+                },
+                -- your configuration comes here; leave empty for default settings
+            },
         },
     },
 }
