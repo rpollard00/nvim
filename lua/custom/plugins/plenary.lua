@@ -1,8 +1,8 @@
 return {
+  {
+    -- Plenary is some tools made by TJ
     {
-        -- Plenary is some tools made by TJ
-        {
-            'nvim-lua/plenary.nvim',
-        },
+      'nvim-lua/plenary.nvim',
     },
+  },
 }

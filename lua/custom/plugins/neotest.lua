@@ -1,8 +1,8 @@
 return {
+  {
+    -- For interacting with tests/debugging
     {
-        -- For interacting with tests/debugging
-        {
-            'nvim-neotest/nvim-nio',
-        },
+      'nvim-neotest/nvim-nio',
     },
+  },
 }

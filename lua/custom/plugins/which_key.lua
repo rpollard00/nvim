@@ -1,13 +1,13 @@
 return {
+  {
+    -- Shows available keybindings as you type
     {
-        -- Shows available keybindings as you type
-        {
-            'folke/which-key.nvim',
-            opts = {
-                plugins = {
-                    marks = false,
-                },
-            },
+      'folke/which-key.nvim',
+      opts = {
+        plugins = {
+          marks = false,
         },
+      },
     },
+  },
 }
