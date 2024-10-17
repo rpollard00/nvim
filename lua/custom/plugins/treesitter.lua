@@ -14,7 +14,20 @@ return {
         -- require 'nvim-treesitter.install'.compilers = { "zig" }
         require('nvim-treesitter.configs').setup {
           -- Add languages to be installed here that you want installed for treesitter
-          ensure_installed = { 'bicep', 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+          ensure_installed = {
+            'bicep',
+            'c',
+            'cpp',
+            'go',
+            'lua',
+            'ocaml',
+            'python',
+            'rust',
+            'tsx',
+            'typescript',
+            'vimdoc',
+            'vim',
+          },
 
           sync_install = false,
           -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
@@ -25,7 +38,7 @@ return {
           highlight = {
             enable = true,
           },
-          indent = { enable = true },
+          indent = { enable = false },
           incremental_selection = {
             enable = true,
             keymaps = {

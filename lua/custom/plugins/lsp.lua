@@ -124,7 +124,18 @@ return {
               telemetry = { enable = false },
             },
           },
-          ocamllsp = {},
+          ocamllsp = {
+            manual_install = true,
+            cmd = { 'dune', 'exec', 'ocamllsp' },
+            settings = {
+              codelens = { enable = true },
+              inlayHints = { enable = true },
+              syntaxDocumentation = { enable = true },
+            },
+            server_capabilities = {
+              semanticTokensProvider = false,
+            },
+          },
           -- prettier = {},
           pyright = {},
           rust_analyzer = {},
