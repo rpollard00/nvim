@@ -139,6 +139,7 @@ return {
           -- prettier = {},
           pyright = {},
           rust_analyzer = {},
+          wgsl_analyzer = {},
           terraformls = {},
           typst_lsp = {},
           ts_ls = {},
