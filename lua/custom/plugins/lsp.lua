@@ -71,7 +71,7 @@ return {
 
         -- Useful status updates for LSP
         -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-        { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+        -- { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
         -- Additional lua configuration, makes nvim stuff amazing!
         --
@@ -139,7 +139,9 @@ return {
           -- prettier = {},
           pyright = {},
           rust_analyzer = {},
-          wgsl_analyzer = {},
+          wgsl_analyzer = {
+            filetypes = { 'wgsl' },
+          },
           terraformls = {},
           typst_lsp = {},
           ts_ls = {},
