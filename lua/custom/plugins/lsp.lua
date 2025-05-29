@@ -2,14 +2,32 @@ return {
   {
     'mason-org/mason.nvim',
     config = function()
-      require('mason').setup()
+      require('mason').setup {
+        registries = {
+          'github:mason-org/mason-registry',
+          'github:Crashdummyy/mason-registry',
+        },
+      }
     end,
   },
   {
     'mason-org/mason-lspconfig.nvim',
     config = function()
       require('mason-lspconfig').setup {
-        ensure_installed = { 'lua_ls', 'rust_analyzer', 'eslint', 'gopls', 'html', 'cssls', 'emmet_language_server', 'ocamllsp', 'vtsls', 'zls' },
+        ensure_installed = {
+          'lua_ls',
+          'rust_analyzer',
+          'eslint',
+          'gopls',
+          'html',
+          'cssls',
+          'emmet_language_server',
+          'ocamllsp',
+          'vtsls',
+          'zls',
+          'roslyn',
+          'rzls',
+        },
         automatic_enable = true,
       }
     end,
