@@ -25,8 +25,6 @@ return {
           'ocamllsp',
           'vtsls',
           'zls',
-          'roslyn',
-          'rzls',
         },
         automatic_enable = true,
       }

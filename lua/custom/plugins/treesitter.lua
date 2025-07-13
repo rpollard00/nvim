@@ -20,7 +20,6 @@ return {
             'cpp',
             'go',
             'lua',
-            'ocaml',
             'python',
             'rust',
             'tsx',
