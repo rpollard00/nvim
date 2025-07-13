@@ -22,7 +22,6 @@ return {
           'html',
           'cssls',
           'emmet_language_server',
-          'ocamllsp',
           'vtsls',
           'zls',
         },
