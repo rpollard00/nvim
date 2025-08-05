@@ -1,4 +1,5 @@
 vim.keymap.set('n', '<leader>gf', ':Gofmt<CR>')
+vim.keymap.set('n', '<leader>cc', ':ClaudeCode<CR>', { desc = 'Launch ClaudeCode' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
