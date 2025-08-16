@@ -39,6 +39,16 @@ return {
         local client = vim.lsp.get_client_by_id(client_id)
         local bufnr = args.buf
 
+        -- Enable code lens if supported
+        if client.server_capabilities.codeLensProvider then
+          vim.lsp.codelens.refresh()
+          -- Auto-refresh code lens on buffer changes
+          vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+            buffer = bufnr,
+            callback = vim.lsp.codelens.refresh,
+          })
+        end
+
         -- Only attach to clients that support document formatting
         if not client.server_capabilities.documentFormattingProvider then
           return

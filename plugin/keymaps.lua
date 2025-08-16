@@ -80,6 +80,10 @@ local on_attach = function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+  -- Code lens keybindings
+  nmap('<leader>cl', vim.lsp.codelens.run, '[C]ode [L]ens Run')
+  nmap('<leader>cr', vim.lsp.codelens.refresh, '[C]ode Lens [R]efresh')
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(vim.api.nvim_buf_get_number(0), 'Format', function(_)
     vim.lsp.buf.format()
