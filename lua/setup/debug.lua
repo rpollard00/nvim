@@ -1,3 +1,3 @@
 P = function(v)
-    vim.print(v)
+  vim.print(v)
 end

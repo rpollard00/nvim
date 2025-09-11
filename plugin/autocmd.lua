@@ -1,4 +1,3 @@
-
 -- Automatically display line diagnostics in hover window
 vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 -- Attach bicep lsp to bicep files
