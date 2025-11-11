@@ -18,6 +18,7 @@ return {
             'bicep',
             'c',
             'cpp',
+            'eex',
             'elixir',
             'heex',
             'go',
