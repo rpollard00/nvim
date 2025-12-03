@@ -1,6 +1,6 @@
 return {
   cmd = { 'vscode-html-language-server', '--stdio' },
-  filetypes = { 'html', 'templ', 'eelixir', 'heex' },
+  filetypes = { 'html', 'templ', 'eelixir', 'heex', 'elixir' },
   root_markers = { '.git' },
   init_options = {
     provideFormatter = true,
