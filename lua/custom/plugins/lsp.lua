@@ -1,5 +1,27 @@
 return {
   {
+    'monkoose/neocodeium',
+    event = 'VeryLazy',
+    config = function()
+      local neocodeium = require 'neocodeium'
+      neocodeium.setup()
+      -- Keybindings to accept suggestions in insert mode
+      vim.keymap.set('i', '<A-f>', neocodeium.accept)
+      -- Smart C-y: prioritize ghost text over cmp completions
+      vim.keymap.set('i', '<C-y>', function()
+        local cmp = require 'cmp'
+        -- Check if neocodeium has an active ghost text suggestion
+        local has_ghost_text = neocodeium.visible and neocodeium.visible()
+          or (vim.b.neocodeium_compl ~= nil and vim.b.neocodeium_compl ~= '')
+        if has_ghost_text then
+          neocodeium.accept()
+        elseif cmp.visible() then
+          cmp.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true }
+        end
+      end)
+    end,
+  },
+  {
     'mason-org/mason.nvim',
     config = function()
       require('mason').setup {
@@ -100,10 +122,6 @@ return {
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete {},
-          ['<C-y>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          },
           ['<Enter>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
@@ -128,44 +146,12 @@ return {
           end, { 'i', 's' }),
         },
         sources = {
+          { name = 'easy-dotnet' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
+          { name = 'neocodeium' }, -- Windsurf AI completions
         },
       }
     end,
-  },
-  {
-    -- This is the roslyn lsp for C# - it doesn't like to be standard
-    'seblj/roslyn.nvim',
-    ft = 'cs',
-    opts = {
-      config = {
-        settings = {
-          ['csharp|inlay_hints'] = {
-            csharp_enable_inlay_hints_for_implicit_object_creation = true,
-            csharp_enable_inlay_hints_for_implicit_variable_types = true,
-            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
-            csharp_enable_inlay_hints_for_types = true,
-            dotnet_enable_inlay_hints_for_indexer_parameters = true,
-            dotnet_enable_inlay_hints_for_literal_parameters = true,
-            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
-            dotnet_enable_inlay_hints_for_other_parameters = true,
-            dotnet_enable_inlay_hints_for_parameters = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
-            dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
-          },
-          ['csharp|code_lens'] = {
-            dotnet_enable_references_code_lens = true,
-          },
-          ['csharp|background_analysis'] = {
-            dotnet_analyzer_diagnostics_scope = 'fullSolution',
-            dotnet_compiler_diagnostics_scope = 'fullSolution',
-          },
-        },
-        on_attach = on_attach,
-      },
-      -- your configuration comes here; leave empty for default settings
-    },
   },
 }

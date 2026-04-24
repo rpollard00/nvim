@@ -13,6 +13,7 @@ return {
     'scss',
     'typescriptreact',
     'htmlangular',
+    'razor',
     'eelixir',
     'heex',
     'elixir',
