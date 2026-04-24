@@ -1,5 +1,22 @@
 return {
   cmd = { 'emmet-language-server', '--stdio' },
-  filetypes = { 'css', 'eruby', 'html', 'htmldjango', 'javascriptreact', 'javascript', 'less', 'pug', 'sass', 'scss', 'typescriptreact', 'htmlangular', 'eelixir', 'heex' },
+  filetypes = {
+    'css',
+    'eruby',
+    'html',
+    'htmldjango',
+    'javascriptreact',
+    'javascript',
+    'less',
+    'pug',
+    'sass',
+    'scss',
+    'typescriptreact',
+    'htmlangular',
+    'razor',
+    'eelixir',
+    'heex',
+    'elixir',
+  },
   root_markers = { '.git' },
 }

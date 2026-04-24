@@ -70,6 +70,10 @@ return {
               return
             end
 
+            if vim.bo[bufnr].filetype == 'razor' then
+              return
+            end
+
             vim.lsp.buf.format {
               async = false,
               filter = function(c)
