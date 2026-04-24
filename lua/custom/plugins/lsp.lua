@@ -1,7 +1,10 @@
+local severance = require 'severance'
+
 return {
   {
     'monkoose/neocodeium',
     event = 'VeryLazy',
+    cond = severance.when 'innie',
     config = function()
       local neocodeium = require 'neocodeium'
       neocodeium.setup()
@@ -110,6 +113,16 @@ return {
       require('luasnip.loaders.from_vscode').lazy_load()
       luasnip.config.setup {}
 
+      local sources = {
+        { name = 'easy-dotnet' },
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+      }
+
+      if severance.is 'innie' then
+        table.insert(sources, { name = 'neocodeium' }) -- Windsurf AI completions
+      end
+
       cmp.setup {
         snippet = {
           expand = function(args)
@@ -145,12 +158,7 @@ return {
             end
           end, { 'i', 's' }),
         },
-        sources = {
-          { name = 'easy-dotnet' },
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'neocodeium' }, -- Windsurf AI completions
-        },
+        sources = sources,
       }
     end,
   },

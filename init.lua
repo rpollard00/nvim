@@ -6,6 +6,36 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+local severance_path = vim.fn.stdpath 'data' .. '/severance/severance.nvim'
+if not vim.loop.fs_stat(severance_path) then
+  vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/rpollard00/severance.nvim.git',
+    severance_path,
+  }
+end
+
+vim.opt.rtp:prepend(severance_path)
+
+require('severance').setup {
+  default = 'outie',
+  profiles = {
+    outie = {
+      settings = {
+        ai = false,
+      },
+    },
+    innie = {
+      extends = 'outie',
+      settings = {
+        ai = true,
+      },
+    },
+  },
+}
+
 require 'setup.platform_options'
 require 'setup.debug'
 require 'kickstart.plugins.autoformat'
