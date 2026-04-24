@@ -24,12 +24,14 @@ require('severance').setup {
   profiles = {
     outie = {
       settings = {
+        colorscheme = 'gruvbox',
         ai = false,
       },
     },
     innie = {
       extends = 'outie',
       settings = {
+        colorscheme = 'tokyonight',
         ai = true,
       },
     },
@@ -79,6 +81,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+local s = require 'severance'
+vim.cmd.colorscheme(s.setting 'colorscheme')
 --
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

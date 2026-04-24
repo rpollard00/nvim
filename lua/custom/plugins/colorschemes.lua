@@ -11,7 +11,6 @@ return {
           contrast = 'hard',
           invert_selection = true,
         }
-        vim.cmd [[colorscheme gruvbox]]
       end,
       opts = ...,
     },
@@ -26,6 +25,12 @@ return {
     {
       -- Theme inspired by rose-pine
       'rose-pine/neovim',
+      priority = 1000,
+      config = function() end,
+    },
+    {
+      -- tokyo night
+      'folke/tokyonight.nvim',
       priority = 1000,
       config = function() end,
     },
