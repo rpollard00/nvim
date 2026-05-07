@@ -168,7 +168,7 @@ return {
           end, 'File References')
 
           -- Enable inlay hints if supported
-          if client.supports_method 'textDocument/inlayHint' then
+          if client:supports_method 'textDocument/inlayHint' then
             vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
           end
         end
